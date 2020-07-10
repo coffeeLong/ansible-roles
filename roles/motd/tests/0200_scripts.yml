@@ -1,0 +1,53 @@
+---
+
+- name: "{{ test }}"
+  hosts: debian
+  become: true
+  gather_facts: false
+  tasks:
+
+    - block:
+
+        - block:
+            - import_role:
+                name: manala.motd
+              vars:
+                manala_motd_scripts:
+                  - file: 00-uname
+                    template: scripts/uname.j2
+                  - file: 10-message
+                    message: I hope that someone gets my message in a bottle, yeah
+                  - file: 20-content
+                    content: |
+                      #!/bin/sh
+                      printf "Maintenant vous faites ce qu'ils vous ont dit de faire\n"
+
+        # Defaults
+        - block:
+            - import_role:
+                name: manala.motd
+              vars:
+                manala_motd_scripts_defaults:
+                  template: scripts/cow.j2
+                manala_motd_scripts:
+                  - file: 30-cow
+                    message: Moo Moo Moo
+                  - file: 40-foo
+                    template: scripts/dragon.j2
+                    message: Fooooo bar baaaaaz
+                  - file: 41-foo
+                    template: scripts/manala.j2
+                    message: Fooooo bar baaaaaz
+                  - file: 42-foo
+                    template: scripts/stegosaurus.j2
+                    message: Fooooo bar baaaaaz
+                  - file: 43-foo
+                    template: scripts/turkey.j2
+                    message: Fooooo bar baaaaaz
+                  - file: 44-foo
+                    template: scripts/yoda.j2
+                    message: Fooooo bar baaaaaz
+
+      # always:
+      #   - name: Goss
+      #     command: goss --gossfile {{ test }}.goss.yml validate
